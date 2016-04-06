@@ -22,6 +22,10 @@ public class Apparatus {
     io.close();
   }
 
+  /**
+   * Process and load the pictures from the input into a datastructure. Also make
+   * sure that the inverse of each picture is added so we add all possible wirings.
+   */
   public static int processPictures(InputStream in) {
     Kattio io = new Kattio(in, System.out);
 
@@ -63,6 +67,12 @@ public class Apparatus {
     return analyzePictures(pictures, bits, pictureAmount);
   }
 
+  /**
+   * The theoretical limit of different union combinations is 2^bits but we will only have 
+   * around 2000 of those. The analysis iterates for every bit in bits and checks how many
+   * pictures have it set, those pictures form a set, and the number of bits that set sets
+   * is counted and multiplied with an factorial to give the answer.
+   */
   public static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
 
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
@@ -102,6 +112,9 @@ public class Apparatus {
     return wirings;
   }
 
+  /**
+   * Factorial using modulo.
+   */
   public static int moduloFactorial(int n, int modulo) {
     int result = 1;
 
