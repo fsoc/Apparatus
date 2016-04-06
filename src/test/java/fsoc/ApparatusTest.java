@@ -19,6 +19,21 @@ public class ApparatusTest {
     executeTextFiles("samples/apparatus.02.in", "samples/apparatus.02.ans");
   }
 
+  @Test
+  public void kestSample3() throws IOException {
+    executeTextFiles("samples/apparatus.03.in", "samples/apparatus.03.ans");
+  }
+
+  @Test
+  public void kestSample4() throws IOException {
+    executeTextFiles("samples/apparatus.04.in", "samples/apparatus.04.ans");
+  }
+
+  @Test
+  public void kestSample5() throws IOException {
+    executeTextFiles("samples/apparatus.05.in", "samples/apparatus.05.ans");
+  }
+
 
   public void executeTextFiles(String indata, String answer) throws IOException {
     InputStream input = new FileInputStream(indata);

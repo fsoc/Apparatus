@@ -27,7 +27,7 @@ public class Apparatus {
 
     // Read the first line with the number of bits and number of pictures for the problem
     int bits = io.getInt();
-    int pictureAmount = io.getInt();
+    int pictureAmount = io.getInt() * 2;
 
     // A datastructure containing pictures in the form of a switches and lights
     BigInteger[][] pictures = new BigInteger[pictureAmount][2];
@@ -35,27 +35,35 @@ public class Apparatus {
     int p = 0; //Picture counter
     // Get all the pictures
     while (io.hasMoreTokens()) {
+      String switches = io.getWord();
+      String lights = io.getWord();
 
-      pictures[p][0] = new BigInteger(io.getWord(), 2);
-      pictures[p][1] = new BigInteger(io.getWord(), 2);
+      pictures[p][0] = new BigInteger(switches, 2);
+      pictures[p][1] = new BigInteger(lights, 2);
+
+      int offset = pictureAmount / 2;
+      pictures[offset + p][0] = flippedBits(new BigInteger(switches, 2), bits);
+      pictures[offset + p][1] = flippedBits(new BigInteger(lights, 2), bits);
       p++;
 
     }
 
     // In the special case where there is no pictures we add a picture that gives no information
     if (pictureAmount == 0) {
-      pictureAmount = 1;
+      pictureAmount = 2;
       pictures = new BigInteger[pictureAmount][2];
 
-      String input = "";
-      for (int i = 0; i<bits; i++) {
-        input += "1";
+      pictures[0][0] = BigInteger.ZERO;
+      pictures[0][1] = BigInteger.ZERO;
 
-      }
-      pictures[p][0] = new BigInteger(input, 2);
-      pictures[p][1] = new BigInteger(input, 2);
+      pictures[1][0] = flippedBits(BigInteger.ZERO, bits);
+      pictures[1][1] = flippedBits(BigInteger.ZERO, bits);
+
     }
+    return analyzePictures(pictures, bits, pictureAmount);
+  }
 
+  public static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
 
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
 
@@ -103,5 +111,15 @@ public class Apparatus {
     }
 
     return result;
+  }
+
+  /**
+   * Only flips the first n bits of the number
+   */
+  public static BigInteger flippedBits(BigInteger number, int n) {
+    for (int i = 0; i < n; i++) {
+      number = number.flipBit(i);
+    }
+    return number;
   }
 }
