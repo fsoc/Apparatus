@@ -10,4 +10,4 @@ https://spotify.kattis.com/problems/apparatus
     mvn test
 
 ## run
-    cat samples/apparatus00.in |java -cp target/Apparatus-1.0.jar  fsoc.Apparatus 
+    cat samples/apparatus.06.in |java -cp target/Apparatus-1.0.jar  fsoc.Apparatus 
