@@ -60,14 +60,12 @@ public class Apparatus {
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
 
     // Examine the bits of all pictures one, by one
-    BigInteger two = new BigInteger("2");
     for (int i = 0; i < bits; i++) {
-      BigInteger oneBitSet = two.pow(i);
 
       // Investigate the pictures that has this bit set to see the set containing it
       String key = "";
       for (int j = 0; j < pictureAmount; j++) {
-        if (!pictures[j][0].and(oneBitSet).equals(BigInteger.ZERO)) {
+        if (pictures[j][0].testBit(i)) {
           key += j + ",";
         }
       }
