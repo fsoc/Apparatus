@@ -14,12 +14,18 @@ public class ApparatusTest {
     executeTextFiles("samples/apparatus.00.in", "samples/apparatus.00.ans");
   }
 
+  @Test
+  public void kestSample2() throws IOException {
+    executeTextFiles("samples/apparatus.02.in", "samples/apparatus.02.ans");
+  }
+
+
   public void executeTextFiles(String indata, String answer) throws IOException {
     InputStream input = new FileInputStream(indata);
     InputStream answerStream = new FileInputStream(answer);
     String answerString = streamToString(answerStream);
 
-    assertEquals(answerString, Apparatus.processPictures(input));
+    assertEquals(answerString, "" +Apparatus.processPictures(input));
 
     input.close();
     answerStream.close();
