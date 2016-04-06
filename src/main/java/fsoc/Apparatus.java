@@ -75,6 +75,11 @@ public class Apparatus {
    */
   public static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
 
+    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
+    if (errorCheck(pictures, pictureAmount)) {
+      return 0;
+    }
+
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
 
     // Examine the bits of all pictures one, by one
@@ -110,6 +115,20 @@ public class Apparatus {
     }
 
     return wirings;
+  }
+
+  public static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
+    // Check if any combination of two pictures does not make sense by checking the amount
+    // of switches and lights set on each picture and all combinations
+    for (int i = 0; i < pictureAmount; i++) {
+      for (int j = 0; j < pictureAmount; j++) {
+        if (pictures[i][0].and(pictures[j][0]).bitCount() != pictures[i][1].and(pictures[j][1]).bitCount()) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
