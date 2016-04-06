@@ -7,33 +7,37 @@ import java.io.FileInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.StringBuilder;
+import java.util.Collection;
+import java.util.ArrayList;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
 public class ApparatusTest {
-  @Test
-  public void kestSample0() throws IOException {
-    executeTextFiles("samples/apparatus.00.in", "samples/apparatus.00.ans");
+
+  @Parameters
+  public static Collection<Object[]> getFiles() {
+    Collection<Object[]> params = new ArrayList<Object[]>();
+    for (File f : new File("./samples").listFiles()) {
+      if (f.toString().contains(".in")) {
+        Object[] arr = new Object[] { f };
+        params.add(arr);
+      }
+    }
+    return params;
+  }
+
+  private  File file;
+  public ApparatusTest(File file) {
+    this.file = file;
   }
 
   @Test
-  public void kestSample2() throws IOException {
-    executeTextFiles("samples/apparatus.02.in", "samples/apparatus.02.ans");
+  public void testY() throws IOException {
+    executeTextFiles(file.toString(), file.toString().replace("in","ans"));
   }
-
-  @Test
-  public void kestSample3() throws IOException {
-    executeTextFiles("samples/apparatus.03.in", "samples/apparatus.03.ans");
-  }
-
-  @Test
-  public void kestSample4() throws IOException {
-    executeTextFiles("samples/apparatus.04.in", "samples/apparatus.04.ans");
-  }
-
-  @Test
-  public void kestSample5() throws IOException {
-    executeTextFiles("samples/apparatus.05.in", "samples/apparatus.05.ans");
-  }
-
 
   public void executeTextFiles(String indata, String answer) throws IOException {
     InputStream input = new FileInputStream(indata);
