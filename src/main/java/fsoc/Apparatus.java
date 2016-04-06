@@ -73,7 +73,7 @@ public class Apparatus {
    * pictures have it set, those pictures form a set, and the number of bits that set sets
    * is counted and multiplied with an factorial to give the answer.
    */
-  public static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
+  private static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
 
     // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
     if (errorCheck(pictures, pictureAmount)) {
@@ -102,7 +102,14 @@ public class Apparatus {
         }
       }
     }
+    return multiply(setCounter);
+  }
 
+
+  /**
+   * Multiplies the factorials of the different sets based of the number of them found.
+   */
+  private static int multiply(Map<String, Integer> setCounter) {
     int wirings = 1;
 
     Iterator<Map.Entry<String, Integer>> it = setCounter.entrySet().iterator();
@@ -117,7 +124,7 @@ public class Apparatus {
     return wirings;
   }
 
-  public static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
+  private static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
     // Check if any combination of two pictures does not make sense by checking the amount
     // of switches and lights set on each picture and all combinations
     for (int i = 0; i < pictureAmount; i++) {
@@ -134,7 +141,7 @@ public class Apparatus {
   /**
    * Factorial using modulo.
    */
-  public static int moduloFactorial(int n, int modulo) {
+  private static int moduloFactorial(int n, int modulo) {
     int result = 1;
 
     while (n != 0) {
@@ -148,7 +155,7 @@ public class Apparatus {
   /**
    * Only flips the first n bits of the number
    */
-  public static BigInteger flippedBits(BigInteger number, int n) {
+  private static BigInteger flippedBits(BigInteger number, int n) {
     for (int i = 0; i < n; i++) {
       number = number.flipBit(i);
     }
