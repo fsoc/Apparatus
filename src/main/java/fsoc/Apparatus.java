@@ -95,8 +95,9 @@ public class Apparatus {
 
       if (key.length() > 0) {
         // Store the number of findings of bits of this set in a hashmap
-        if (setCounter.containsKey(key)) {
-          setCounter.put(key, setCounter.get(key) + 1);
+        Integer findings = setCounter.get(key);
+        if (findings != null) {
+          setCounter.put(key, findings + 1);
         } else {
           setCounter.put(key, 1);
         }
@@ -130,6 +131,7 @@ public class Apparatus {
     // Check if any combination of two pictures does not make sense by checking the amount
     // of switches and lights set on each picture and all combinations.
     int jstart = 0;
+
     for (int i = 0; i < pictureAmount; i++) {
       for (int j = jstart; j < pictureAmount; j++) {
         if (pictures[i][0].and(pictures[j][0]).bitCount() != pictures[i][1].and(pictures[j][1]).bitCount()) {
