@@ -64,7 +64,12 @@ public class Apparatus {
       pictures[1][1] = flippedBits(BigInteger.ZERO, bits);
 
     }
-    return analyzePictures(pictures, bits, pictureAmount);
+    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
+    if (errorCheck(pictures, pictureAmount/2)) {
+      return 0;
+    }
+
+    return analyzePictures(pictures, bits);
   }
 
   /**
@@ -73,12 +78,9 @@ public class Apparatus {
    * pictures have it set, those pictures form a set, and the number of bits that set sets
    * is counted and multiplied with an factorial to give the answer.
    */
-  private static int analyzePictures(BigInteger[][] pictures, int bits, int pictureAmount) {
+  private static int analyzePictures(BigInteger[][] pictures, int bits) {
+    int pictureAmount = pictures.length;
 
-    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    if (errorCheck(pictures, pictureAmount)) {
-      return 0;
-    }
 
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
 
