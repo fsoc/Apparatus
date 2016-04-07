@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Iterator;
 
 public class Apparatus {
-  static final int MOD = 1000003;
 
   public static void main(String[] args) {
     Kattio io = new Kattio(System.in, System.out);
@@ -46,8 +45,8 @@ public class Apparatus {
       pictures[p][1] = new BigInteger(lights, 2);
 
       int offset = pictureAmount / 2;
-      pictures[offset + p][0] = flippedBits(new BigInteger(switches, 2), bits);
-      pictures[offset + p][1] = flippedBits(new BigInteger(lights, 2), bits);
+      pictures[offset + p][0] = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits);
+      pictures[offset + p][1] = ApparatusHelper.flippedBits(new BigInteger(lights, 2), bits);
       p++;
 
     }
@@ -60,8 +59,8 @@ public class Apparatus {
       pictures[0][0] = BigInteger.ZERO;
       pictures[0][1] = BigInteger.ZERO;
 
-      pictures[1][0] = flippedBits(BigInteger.ZERO, bits);
-      pictures[1][1] = flippedBits(BigInteger.ZERO, bits);
+      pictures[1][0] = ApparatusHelper.flippedBits(BigInteger.ZERO, bits);
+      pictures[1][1] = ApparatusHelper.flippedBits(BigInteger.ZERO, bits);
 
     }
     // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
@@ -105,27 +104,7 @@ public class Apparatus {
         }
       }
     }
-    return multiply(setCounter);
-  }
-
-
-  /**
-   * Multiplies the factorials of the different sets based of the number of them found.
-   */
-  private static int multiply(Map<String, Integer> setCounter) {
-    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    int wirings = 1;
-
-    Iterator<Map.Entry<String, Integer>> it = setCounter.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<String, Integer> pair = it.next();
-      // Only add values >1 since 0! = 1! = 1
-      if (pair.getValue() > 1) {
-        wirings *= moduloFactorial(pair.getValue(), MOD);
-      }
-    }
-
-    return wirings;
+    return ApparatusHelper.multiply(setCounter);
   }
 
   private static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
@@ -147,27 +126,4 @@ public class Apparatus {
     return false;
   }
 
-  /**
-   * Factorial using modulo.
-   */
-  private static int moduloFactorial(int n, int modulo) {
-    int result = 1;
-
-    while (n != 0) {
-      result = (result * n) % modulo;
-      n--;
-    }
-
-    return result;
-  }
-
-  /**
-   * Only flips the first n bits of the number
-   */
-  private static BigInteger flippedBits(BigInteger number, int n) {
-    for (int i = 0; i < n; i++) {
-      number = number.flipBit(i);
-    }
-    return number;
-  }
 }
