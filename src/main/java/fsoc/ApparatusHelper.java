@@ -33,7 +33,7 @@ public class ApparatusHelper {
   /**
    * Factorial using modulo.
    */
-  private static int moduloFactorial(int n, int modulo) {
+  public static int moduloFactorial(int n, int modulo) {
     int result = 1;
 
     while (n != 0) {
