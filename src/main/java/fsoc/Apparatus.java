@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Iterator;
 
 public class Apparatus {
+  static final int MOD = 1000003;
 
   public static void main(String[] args) {
     Kattio io = new Kattio(System.in, System.out);
@@ -47,21 +48,13 @@ public class Apparatus {
       int offset = pictureAmount / 2;
       pictures[offset + p][0] = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits);
       pictures[offset + p][1] = ApparatusHelper.flippedBits(new BigInteger(lights, 2), bits);
-      p++;
 
+      p++;
     }
 
-    // In the special case where there is no pictures we add a picture that gives no information
+    // In the special case where there is no pictures then all n! are possible
     if (pictureAmount == 0) {
-      pictureAmount = 2;
-      pictures = new BigInteger[pictureAmount][2];
-
-      pictures[0][0] = BigInteger.ZERO;
-      pictures[0][1] = BigInteger.ZERO;
-
-      pictures[1][0] = ApparatusHelper.flippedBits(BigInteger.ZERO, bits);
-      pictures[1][1] = ApparatusHelper.flippedBits(BigInteger.ZERO, bits);
-
+      return ApparatusHelper.moduloFactorial(bits, MOD);
     }
 
     return analyzePictures(pictures, bits);
@@ -104,6 +97,7 @@ public class Apparatus {
         }
       }
     }
+
     return ApparatusHelper.multiply(setCounter);
   }
 
