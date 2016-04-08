@@ -53,4 +53,20 @@ public class ApparatusHelper {
     }
     return number;
   }
+
+  /**
+   * Transpose picture data to make it easier to find if the n-th bit is set in which pictures. We
+   * do this in order to keep track of how many bits each distinct "set" in order to later multiply
+   * the factorials of each number of sets together to reach the answer.
+   */
+  public static char[][] transposeMatrix(char[][] arr) {
+    char[][] transposed = new char[arr[0].length][arr.length];
+
+    for (int i = 0; i < arr.length; i++) {
+      for (int j = 0; j < arr[0].length; j++) {
+        transposed[j][i] = arr[i][j];
+      }
+    }
+    return transposed;
+  }
 }

@@ -31,10 +31,14 @@ public class Apparatus {
 
     // Read the first line with the number of bits and number of pictures for the problem
     int bits = io.getInt();
-    int pictureAmount = io.getInt() * 2;
+    int pictureAmount = io.getInt();
 
     // A datastructure containing pictures in the form of a switches and lights
     BigInteger[][] pictures = new BigInteger[pictureAmount][2];
+
+    // A datastructure containing pictures and their flipped bit versions as an array of char arrays
+    // it is only used temporarily for reading in the string data.
+    char[][] pictureInputCharArr = new char[pictureAmount*2][bits];
 
     int p = 0; //Picture counter
     // Get all the pictures
@@ -45,19 +49,29 @@ public class Apparatus {
       pictures[p][0] = new BigInteger(switches, 2);
       pictures[p][1] = new BigInteger(lights, 2);
 
-      int offset = pictureAmount / 2;
-      pictures[offset + p][0] = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits);
-      pictures[offset + p][1] = ApparatusHelper.flippedBits(new BigInteger(lights, 2), bits);
+      pictureInputCharArr[p] = switches.toCharArray();
+      String bitFlippedPicture = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits).toString(2);
+
+      // Pad the string with enough zeros
+      while ((bits - bitFlippedPicture.length()) > 0) {
+        bitFlippedPicture = "0" + bitFlippedPicture;
+      }
+      pictureInputCharArr[pictureAmount + p] = bitFlippedPicture.toCharArray();
 
       p++;
     }
 
-    // In the special case where there is no pictures then all n! are possible
+    // In the special case where there is no pictures then one set with n! possibilities is returned 
     if (pictureAmount == 0) {
       return ApparatusHelper.moduloFactorial(bits, MOD);
     }
 
-    return analyzePictures(pictures, bits);
+    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
+    if (errorCheck(pictures, pictureAmount)) {
+      return 0;
+    }
+
+    return analyzePictures(ApparatusHelper.transposeMatrix(pictureInputCharArr));
   }
 
   /**
@@ -66,28 +80,17 @@ public class Apparatus {
    * pictures have it set, those pictures form a set, and the number of bits that set sets
    * is counted and multiplied with an factorial to give the answer.
    */
-  private static int analyzePictures(BigInteger[][] pictures, int bits) {
+  private static int analyzePictures(char[][] pictures) {
     int pictureAmount = pictures.length;
-
-    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    if (errorCheck(pictures, pictureAmount/2)) {
-      return 0;
-    }
 
     Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
 
-    // Examine the bits of all pictures one, by one
-    for (int i = 0; i < bits; i++) {
+    for (int i = 0; i < pictures.length; i++) {
+      String key = new String(pictures[i]);
 
-      // Investigate the pictures that has this bit set to see the set containing it
-      String key = "";
-      for (int j = 0; j < pictureAmount; j++) {
-        if (pictures[j][0].testBit(i)) {
-          key += j + ",";
-        }
-      }
-
-      if (key.length() > 0) {
+      // If this array contains bits that are set, then there are atleast some pictures
+      // that can create a set that we care about counting
+      if (key.indexOf('1') > -1) {
         // Store the number of findings of bits of this set in a hashmap
         Integer findings = setCounter.get(key);
         if (findings != null) {
