@@ -23,7 +23,7 @@ public class ApparatusHelper {
       Map.Entry<String, Integer> pair = it.next();
       // Only add values >1 since 0! = 1! = 1
       if (pair.getValue() > 1) {
-        wirings *= moduloFactorial(pair.getValue(), MOD);
+        wirings *= (moduloFactorial(pair.getValue(), MOD) % MOD;
       }
     }
 

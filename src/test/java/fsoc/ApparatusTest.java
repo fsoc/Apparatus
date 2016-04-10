@@ -36,7 +36,12 @@ public class ApparatusTest {
 
   @Test
   public void testY() throws IOException {
-    executeTextFiles(file.toString(), file.toString().replace("in","ans"));
+    try  {
+      executeTextFiles(file.toString(), file.toString().replace("in","ans"));
+    } catch(Exception e) {
+      System.out.println(file.toString());
+      e.printStackTrace(); 
+    }
   }
 
   public void executeTextFiles(String indata, String answer) throws IOException {
