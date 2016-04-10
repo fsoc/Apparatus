@@ -47,11 +47,18 @@ public class ApparatusHelper {
   /**
    * Only flips the first n bits of the number
    */
-  public static BigInteger flippedBits(BigInteger number, int n) {
+  public static String flippedBits(BigInteger number, int n) {
     for (int i = 0; i < n; i++) {
       number = number.flipBit(i);
     }
-    return number;
+
+    String bitFlippedPicture = number.toString(2);
+
+    // Pad the string with enough zeros
+    while ((n - bitFlippedPicture.length()) > 0) {
+      bitFlippedPicture = "0" + bitFlippedPicture;
+    }
+    return bitFlippedPicture;
   }
 
   /**
