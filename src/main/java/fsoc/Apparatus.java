@@ -65,11 +65,6 @@ public class Apparatus {
       return ApparatusHelper.moduloFactorial(bits, MOD);
     }
 
-    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    if (errorCheck(pictures, pictureAmount)) {
-      return 0;
-    }
-
     return analyzePictures(ApparatusHelper.transposeMatrix(switchArray), ApparatusHelper.transposeMatrix(lightArray));
   }
 
@@ -90,12 +85,10 @@ public class Apparatus {
       incrementOrCreate(lightsCounter, new String(lights[i]));
     }
 
-    // Check for errors in pictures by checking if the sizes of the sets is the same
+    // Check for errors in pictures by checking if the set occurances are the same
     // they should be since the switches and lights are linearly mapped.
-    if (switchesCounter.size() != lightsCounter.size() ||
-        !switchesCounter.keySet().containsAll(lightsCounter.keySet()) ) {
+    if (!switchesCounter.equals(lightsCounter))
       return 0;
-    }
     return ApparatusHelper.multiply(switchesCounter);
   }
 
@@ -114,25 +107,6 @@ public class Apparatus {
         hashMap.put(key, 1);
       }
     }
-  }
-
-  private static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
-    // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    // Check if any combination of two pictures does not make sense by checking the amount
-    // of switches and lights set on each picture and all combinations.
-    int jstart = 0;
-
-    for (int i = 0; i < pictureAmount; i++) {
-      for (int j = jstart; j < pictureAmount; j++) {
-        if (pictures[i][0].and(pictures[j][0]).bitCount() != pictures[i][1].and(pictures[j][1]).bitCount()) {
-          return true;
-        }
-      }
-      // The order of the and operation does not matter, increase j when we can.
-      jstart++;
-    }
-
-    return false;
   }
 
 }
