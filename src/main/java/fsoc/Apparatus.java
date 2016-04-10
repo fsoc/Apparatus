@@ -27,7 +27,7 @@ public class Apparatus {
    * Process and load the pictures from the input into a datastructure. Also make
    * sure that the inverse of each picture is added so we add all possible wirings.
    */
-  public static int processPictures(InputStream in) {
+  public static long processPictures(InputStream in) {
     Kattio io = new Kattio(in, System.out);
 
     // Read the first line with the number of bits and number of pictures for the problem
@@ -74,7 +74,7 @@ public class Apparatus {
    * pictures have it set, those pictures form a set, and the number of bits that set sets
    * is counted and multiplied with an factorial to give the answer.
    */
-  private static int analyzePictures(char[][] switches, char[][] lights) {
+  private static long analyzePictures(char[][] switches, char[][] lights) {
     int pictureAmount = switches.length;
 
     Map<String, Integer> switchesCounter = new HashMap<String, Integer>(pictureAmount);
