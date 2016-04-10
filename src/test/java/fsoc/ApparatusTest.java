@@ -49,7 +49,7 @@ public class ApparatusTest {
     InputStream answerStream = new FileInputStream(answer);
     String answerString = streamToString(answerStream);
 
-    assertEquals(answerString, "" +Apparatus.processPictures(input));
+    assertEquals(answerString, Long.toString(Apparatus.processPictures(input)));
 
     input.close();
     answerStream.close();

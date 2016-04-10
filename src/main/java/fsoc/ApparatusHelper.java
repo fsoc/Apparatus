@@ -14,9 +14,9 @@ public class ApparatusHelper {
   /**
    * Multiplies the factorials of the different sets based of the number of them found.
    */
-  public static int multiply(Map<String, Integer> setCounter) {
+  public static long multiply(Map<String, Integer> setCounter) {
     // Make an error check of the pictures, if an error is found 0 wirings match all pictures.
-    int wirings = 1;
+    long wirings = 1;
 
     Iterator<Map.Entry<String, Integer>> it = setCounter.entrySet().iterator();
     while (it.hasNext()) {
@@ -33,8 +33,8 @@ public class ApparatusHelper {
   /**
    * Factorial using modulo.
    */
-  public static int moduloFactorial(int n, int modulo) {
-    int result = 1;
+  public static long moduloFactorial(int n, int modulo) {
+    long result = 1;
 
     while (n != 0) {
       result = (result * n) % modulo;
