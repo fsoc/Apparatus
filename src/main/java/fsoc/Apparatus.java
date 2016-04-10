@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Apparatus {
   static final int MOD = 1000003;
@@ -38,7 +39,8 @@ public class Apparatus {
 
     // A datastructure containing pictures and their flipped bit versions as an array of char arrays
     // it is only used temporarily for reading in the string data.
-    char[][] pictureInputCharArr = new char[pictureAmount*2][bits];
+    char[][] switchArray = new char[pictureAmount*2][bits];
+    char[][] lightArray = new char[pictureAmount*2][bits];
 
     int p = 0; //Picture counter
     // Get all the pictures
@@ -49,14 +51,11 @@ public class Apparatus {
       pictures[p][0] = new BigInteger(switches, 2);
       pictures[p][1] = new BigInteger(lights, 2);
 
-      pictureInputCharArr[p] = switches.toCharArray();
-      String bitFlippedPicture = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits).toString(2);
+      switchArray[p] = switches.toCharArray();
+      lightArray[p] = lights.toCharArray();
 
-      // Pad the string with enough zeros
-      while ((bits - bitFlippedPicture.length()) > 0) {
-        bitFlippedPicture = "0" + bitFlippedPicture;
-      }
-      pictureInputCharArr[pictureAmount + p] = bitFlippedPicture.toCharArray();
+      switchArray[pictureAmount + p] = ApparatusHelper.flippedBits(new BigInteger(switches, 2), bits).toCharArray();
+      lightArray[pictureAmount + p]= ApparatusHelper.flippedBits(new BigInteger(lights, 2), bits).toCharArray();
 
       p++;
     }
@@ -71,7 +70,7 @@ public class Apparatus {
       return 0;
     }
 
-    return analyzePictures(ApparatusHelper.transposeMatrix(pictureInputCharArr));
+    return analyzePictures(ApparatusHelper.transposeMatrix(switchArray), ApparatusHelper.transposeMatrix(lightArray));
   }
 
   /**
@@ -80,28 +79,41 @@ public class Apparatus {
    * pictures have it set, those pictures form a set, and the number of bits that set sets
    * is counted and multiplied with an factorial to give the answer.
    */
-  private static int analyzePictures(char[][] pictures) {
-    int pictureAmount = pictures.length;
+  private static int analyzePictures(char[][] switches, char[][] lights) {
+    int pictureAmount = switches.length;
 
-    Map<String, Integer> setCounter = new HashMap<String, Integer>(pictureAmount);
+    Map<String, Integer> switchesCounter = new HashMap<String, Integer>(pictureAmount);
+    Map<String, Integer> lightsCounter = new HashMap<String, Integer>(pictureAmount);
 
-    for (int i = 0; i < pictures.length; i++) {
-      String key = new String(pictures[i]);
-
-      // If this array contains bits that are set, then there are atleast some pictures
-      // that can create a set that we care about counting
-      if (key.indexOf('1') > -1) {
-        // Store the number of findings of bits of this set in a hashmap
-        Integer findings = setCounter.get(key);
-        if (findings != null) {
-          setCounter.put(key, findings + 1);
-        } else {
-          setCounter.put(key, 1);
-        }
-      }
+    for (int i = 0; i < switches.length; i++) {
+      incrementOrCreate(switchesCounter, new String(switches[i]));
+      incrementOrCreate(lightsCounter, new String(lights[i]));
     }
 
-    return ApparatusHelper.multiply(setCounter);
+    // Check for errors in pictures by checking if the sizes of the sets is the same
+    // they should be since the switches and lights are linearly mapped.
+    if (switchesCounter.size() != lightsCounter.size() ||
+        !switchesCounter.keySet().containsAll(lightsCounter.keySet()) ) {
+      return 0;
+    }
+    return ApparatusHelper.multiply(switchesCounter);
+  }
+
+  /** Appends 1 or creates an integer with the value of 1 for the key if it didnt exist
+   * and if the key contains the value 1, symbolizing a set bit.
+   */
+  private static void incrementOrCreate(Map<String, Integer> hashMap, String key) {
+    // If this array contains bits that are set, then there are atleast some pictures
+    // that can create a set that we care about counting
+    if (key.indexOf('1') > -1) {
+      // Store the number of findings of bits of this set in a hashmap
+      Integer findings = hashMap.get(key);
+      if (findings != null) {
+        hashMap.put(key, findings + 1);
+      } else {
+        hashMap.put(key, 1);
+      }
+    }
   }
 
   private static boolean errorCheck(BigInteger[][] pictures, int pictureAmount) {
